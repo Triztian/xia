@@ -7,6 +7,14 @@ use Ratchet\ConnectionInterface;
 class ChatServer implements MessageComponentInterface {
 	protected $clients;
 
+	private function storeMessage($msg) {
+		$db = new \PDO('mysql:host=localhost;dbname=xia', 'xia', '123456');
+		$sql = sprintf('INSERT INTO tablafinal (MENSAJE) VALUES ("%s")', $msg);
+		print("Executing: $sql\n");
+		$affected = $db->exec($sql);
+		print('Stored ' . $affected);
+	}
+
     public function __construct() {
         $this->clients = new \SplObjectStorage;
     }
@@ -19,7 +27,7 @@ class ChatServer implements MessageComponentInterface {
         // Store the new connection to send messages to later
         $this->clients->attach($conn);
 
-        echo "New connection! ({$conn->resourceId})\n";
+        print("New connection ({$conn->resourceId})\n");
     }
 
 	/**
@@ -32,11 +40,10 @@ class ChatServer implements MessageComponentInterface {
     public function onMessage(ConnectionInterface $from, $msg) {
         $numRecv = count($this->clients) - 1;
 
-		$fh = fopen('/home/xia/www/log.txt', 'a+');
-		fwrite($fh, time() . ':' . $msg . "\n");
+        print(sprintf('Connection %d sending message "%s" to %d other connection%s' . "\n" , 
+				$from->resourceId, $msg, $numRecv, $numRecv == 1 ? '' : 's')); 
 
-        echo sprintf('Connection %d sending message "%s" to %d other connection%s' . "\n"
-            , $from->resourceId, $msg, $numRecv, $numRecv == 1 ? '' : 's');
+		$this->storeMessage($msg);
 
         foreach ($this->clients as $client) {
             if ($from !== $client) {
