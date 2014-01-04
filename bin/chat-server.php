@@ -2,14 +2,14 @@
 require '/home/xia/vendor/autoload.php';
 
 use Ratchet\Server\IoServer;
-use uabc\ai\XiaServer;
+use uabc\ai\ChatServer;
 
 $server = IoServer::factory(
         new HttpServer(
             new WsServer(
-                new XiaServer()
+                new ChatServer()
             )
         ),
-        8081
+        8080
     );
 $server->run();

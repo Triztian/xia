@@ -1,7 +1,14 @@
 {
+	"name": "uabc/xia",
+	"authors": [
+		{
+			"name": "Lopez Azuara Tristian Paul", 
+			"email": "tristian.lopez@uabc.edu.mx"
+		}
+	], 
 	"autoload": {
 		"psr-0": {
-			"xia": "src"
+			"uabc\\": "src/"
 		}
 	},
     "require": {

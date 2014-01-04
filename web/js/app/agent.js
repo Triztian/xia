@@ -13,14 +13,15 @@ requirejs.config({
 });
 
 // Start the main app logic.
-requirejs(['jquery', 'bs', 'views/agent'], function ($, bs, View) {
+requirejs(['jquery', 'bs', 'app/views/agent'], function ($, bs, View) {
+	
 	$(document).ready(function(){
+		console.log('DOM Ready');
 		// Connect to server and poll state
 		// If a game session exists load it.
 		// .. .. 
 		// end state restoration
-		var view = new View({}, 0);
+		var view = new View({size: 10}, {id: 0, location: 21});
 		view.render();
-		console.log('Dom Ready');
 	});
 });
