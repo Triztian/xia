@@ -11,6 +11,10 @@ class ChatServer implements MessageComponentInterface {
         $this->clients = new \SplObjectStorage;
     }
 
+	/**
+	 * Called when a connection is stablished
+	 * @param {ConnectionInterface} conn The stablished connection.
+	 */ 
     public function onOpen(ConnectionInterface $conn) {
         // Store the new connection to send messages to later
         $this->clients->attach($conn);
@@ -18,8 +22,19 @@ class ChatServer implements MessageComponentInterface {
         echo "New connection! ({$conn->resourceId})\n";
     }
 
+	/**
+	 * Called when the server receives a message.
+	 * This should persist the.
+	 *
+	 * @param {ConnectionInterface} from The connection that sent the message
+	 * @param {string} msg The message sent.
+	 */
     public function onMessage(ConnectionInterface $from, $msg) {
         $numRecv = count($this->clients) - 1;
+
+		$fh = fopen('/home/xia/www/log.txt', 'a+');
+		fwrite($fh, time() . ':' . $msg . "\n");
+
         echo sprintf('Connection %d sending message "%s" to %d other connection%s' . "\n"
             , $from->resourceId, $msg, $numRecv, $numRecv == 1 ? '' : 's');
 

@@ -33,12 +33,13 @@ function ($, bs, View, Chat) {
 		chat.connect();
 
 		// Attach DOM events
-		$('.chat button').click(function() {
-			
+		var doSendMessage = function() {
 			var $text = $('.chat textarea'), 
 				msg = $text.val();
 			chat.send(msg);
 			$text.val('');
-		});
+		};
+
+		$('.chat button').click(doSendMessage);
 	});
 });

@@ -18,7 +18,6 @@ define(['jquery'], function ($) {
 	};
 
 	View.prototype.render = function() {
-		console.log(this.game, this.player);
 		var $table = $('table'), html = '';
 		for (var i = 0; i < this.game.size; i++ ) {
 			html += '<tr>';
@@ -27,7 +26,6 @@ define(['jquery'], function ($) {
 			}
 			html += '</tr>';
 		}
-		console.log('Rendering', html);
 		$table.html(html);
 	};
 
