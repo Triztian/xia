@@ -1,21 +1,34 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
-	<head>
-		<style>
-			a {
-				display: block;
-			}
-		</style>
-	</head>
+    <head>
+        <title>PresaDepredador</title>
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" href="style.css" />
+		<link rel="stylesheet" href="css/index.css" />
+    </head>
 	<body>
 		<div class="container">
-			<h1>Xia<h1>
+			<header>
+				<h1><span class="color_blanco">Presa</span> <span class="color_rojo">Depredador</span></h1></a>
+			</header>
 
-			<a href="agent.html">Agent</a>
-			<a href="predator.html?id=1">Predator 1</a>
-			<a href="predator.html?id=2">Predator 2</a>
-			<a href="predator.html?id=3">Predator 3</a>
-			<a href="predator.html?id=4">Predator 4</a>
+			<h3>Elija un rol</h3>
+			<div class="row">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-4">
+					<h4 class="text-warning">Agente</h4>
+					<a title="Agente" href="clienteAg.php">1</a>
+				</div>
+				<div class="col-sm-4">
+					<h4 class="text-warning">Depredador</h4>
+					<a title="Depredador1" id="btn1" href="cliente.php?id=1">1</a>
+					<a title="Depredador2" id="btn2" href="cliente.php?id=2">2</a>
+					<a title="Depredador3" id="btn3" href="cliente.php?id=3">3</a>
+					<a title="Depredador4" id="btn4" href="cliente.php?id=4">4</a>
+				</div>
+				<div class="col-sm-2"></div>
+			</div>
 		</div>
-	</body>
+    </body>
 </html>
+

@@ -1,0 +1,75 @@
+/* ========================= Global properties START ============================= */
+html, body {
+	height:100%;
+}
+html {
+	min-width:990px;
+}
+body {
+	background-color:#000;
+	font-family: 'ArimoRegular';
+	font-size:12px;
+	line-height:18px;
+	color:#333333;
+}
+h1 {
+	font-size:30px;	
+	line-height:center;
+	font-family: 'UbuntuBold';
+	letter-spacing:-1px;
+}
+h2 {
+	font-size:40px;	
+	line-height:center;
+	font-family: 'UbuntuBold';
+	letter-spacing:-1px;
+}
+.color_rojo{
+	color:#DF0101;
+}
+.color_blanco{
+	color:#fff;
+}
+.color_gris{
+	color:#424242;
+}
+
+/* ========================= Global properties END =============================== */
+header{
+	margin:40px auto;
+	position:relative;
+	height:auto;
+	text-align:center;
+	z-index:222;
+}
+/* ========================= Global Structure START ============================== */
+#menu{
+	/*background-color:#424242;*/
+	height:500px;
+	width:280px;
+	float:left;
+	font-family: 'UbuntuBold';
+}
+#tablero{
+	height:500px;
+	width:445px;
+	float:left;
+}
+#space{
+	background-color:#ffff;
+	height:500px;
+	width:130px;
+	float:left;
+}
+#centro{
+	text-align:center;
+}
+#arrowLeft{
+	display:block;
+	float:left;
+}
+#arrowRight{
+	display:block;
+	text-align:right;
+}
+/* ========================= Global Structure END ============================== */

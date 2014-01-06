@@ -6,17 +6,12 @@ use Ratchet\ConnectionInterface;
 
 class ChatServer implements MessageComponentInterface {
 	protected $clients;
+	private $db;
 
-	private function storeMessage($msg) {
-		$db = new \PDO('mysql:host=localhost;dbname=xia', 'xia', '123456');
-		$sql = sprintf('INSERT INTO tablafinal (MENSAJE) VALUES ("%s")', $msg);
-		print("Executing: $sql\n");
-		$affected = $db->exec($sql);
-		print('Stored ' . $affected);
-	}
 
     public function __construct() {
         $this->clients = new \SplObjectStorage;
+		$this->db = new \PDO('mysql:host=localhost;dbname=xia', 'xia', '123456');
     }
 
 	/**
@@ -26,8 +21,12 @@ class ChatServer implements MessageComponentInterface {
     public function onOpen(ConnectionInterface $conn) {
         // Store the new connection to send messages to later
         $this->clients->attach($conn);
-
         print("New connection ({$conn->resourceId})\n");
+		foreach ( $this->clients as $client ) {
+			if ( $conn !== $client ) {
+				$client->send('NEW-CLIENT: ' . $client->resourceId);
+			}
+		}
     }
 
 	/**
@@ -62,7 +61,13 @@ class ChatServer implements MessageComponentInterface {
 
     public function onError(ConnectionInterface $conn, \Exception $e) {
         echo "An error has occurred: {$e->getMessage()}\n";
-
         $conn->close();
     }
+
+	private function storeMessage($msg) {
+		$sql = sprintf('INSERT INTO tablafinal (MENSAJE) VALUES ("%s")', $msg);
+		print("Executing: $sql\n");
+		$affected = $this->db->exec($sql);
+		print('Stored ' . $affected);
+	}
 }

@@ -1,0 +1,20 @@
+h1, h3, h4 {
+	text-align: center;
+}
+
+a {
+	margin: 0 auto;
+	display: block;
+	background-image: url('../imagenes/btn-100x100.png');
+	width: 100px;
+	height: 100px;
+	line-height: 100px;
+	color: white;
+	text-align: center;
+	border-radius: 50%;
+	font-size: 200%;
+}
+
+a:hover {
+	color: #999;
+}

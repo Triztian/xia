@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/chat.css" />
+
+		<script src="js/lib/jquery-2.0.3.min.js"></script>
+		<script src="js/app/config.js"></script>
+		<script src="js/app/chat-client.js"></script>
+		<script src="js/chat.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-5">
+					<h1>Chat</h1>
+					<div id="chat">
+						<dl class="messages"></dl>
+						<form>
+							<div class="checkbox">
+								<label><input type="checkbox" checked="checked" value="1">Chat Enabled</label>
+							</div>
+							<textarea name="message" class="form-control" placeholder="Message"></textarea>
+							<span class="glyphicon glyphicon-globe text-muted"> Connected</span>
+							<button class="btn btn-default pull-right" type="button">Send</button>
+						</form>
+					</div>
+				</div>
+			<div>
+		</div>
+	</body>
+</html>
