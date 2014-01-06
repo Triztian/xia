@@ -141,12 +141,13 @@
 						<td><img alt="Imagen" src="imagenes/vacio.jpg" width="45" height="45" id="99"/></td>
 					</tr>
 				</table>
-				<div>
-					<img id="agent-status" title="Desconectado" alt="Agente" src="imagenes/agent-disconnected.png" />
-					<img id="predator-status-1" title="Desconectado" alt="Depredador 1" src="imagenes/predator-disconnected.png" />
-					<img id="predator-status-2" title="Desconectado" alt="Depredador 2" src="imagenes/predator-disconnected.png" />
-					<img id="predator-status-3" title="Desconectado" alt="Depredador 3" src="imagenes/predator-disconnected.png" />
-					<img id="predator-status-4" title="Desconectado" alt="Depredador 4" src="imagenes/predator-disconnected.png" />
+				<div class="connections">
+					<h3 class="text-warning">Conexiones</h3>
+					<img id="agent-status" title="Desconectado" alt="Agente" src="imagenes/agent-disconnected.png" class="disconnected"/>
+					<img id="predator-status-1" title="Desconectado" alt="Depredador 1" src="imagenes/predator-disconnected.png" class="disconnected"/>
+					<img id="predator-status-2" title="Desconectado" alt="Depredador 2" src="imagenes/predator-disconnected.png" class="disconnected"/>
+					<img id="predator-status-3" title="Desconectado" alt="Depredador 3" src="imagenes/predator-disconnected.png" class="disconnected"/>
+					<img id="predator-status-4" title="Desconectado" alt="Depredador 4" src="imagenes/predator-disconnected.png" class="disconnected"/>
 				</div>
 			</div>
 			<div id="space"></div>

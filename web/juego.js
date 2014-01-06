@@ -93,22 +93,20 @@ $(document).ready(function(){
 					.prop('disabled', false)
 					.attr('src', 'imagenes/mov-arrow.png');
 			} else if ( msg.match(chatView.chat.CLIENT_TYPE_COMMAND) ) {
-				var cmd = chatView.chat.parseMessage(msg);
+				var cmd = chatView.chat.parseMessage(msg), 
+					connAttrs = {
+						'title': 'Conectado',
+						'class': 'connected'
+					};
 				if ( cmd.type == 'A' ) {
-					$('#agent-status').attr({
-						'src': 'imagenes/agent.png', 
-						'title': 'Conectado'
-					});
+					$('#agent-status').attr($.extend(connAttrs, {'src': 'imagenes/agent.png'}));
 				} else {
-					$('#predator-status-' + cmd.type.substring(1)).attr({
-						'src': 'imagenes/predator.png', 
-						'title': 'Conectado'
-					});
+					$('#predator-status-' + cmd.type.substring(1)).attr($.extend(connAttrs, {'src': 'imagenes/predator.png'}));
 				}
 			}
 	};
 
-	$('#predator-status-' + varSec).attr({'src': 'imagenes/predator.png', 'title': 'Conectado'});
+	$('#predator-status-' + varSec).attr({'src': 'imagenes/predator.png', 'title': 'Conectado', 'class': 'connected'});
 });
 
 

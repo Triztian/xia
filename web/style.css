@@ -73,3 +73,12 @@ header{
 	text-align:right;
 }
 /* ========================= Global Structure END ============================== */
+
+.connections img {
+	margin: 0 5px;
+	border: solid 1px transparent;
+}
+.connections .connected {
+	border-radius: 6px;
+	border: solid 1px #0F5734;
+}

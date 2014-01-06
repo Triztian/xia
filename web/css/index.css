@@ -1,20 +1,33 @@
 h1, h3, h4 {
 	text-align: center;
 }
-
 a {
-	margin: 0 auto;
+	border: solid 1px transparent;
+	margin: 0 auto 5px auto;
+	background-size: 100px 100px;
 	display: block;
-	background-image: url('../imagenes/btn-100x100.png');
 	width: 100px;
 	height: 100px;
-	line-height: 100px;
-	color: white;
 	text-align: center;
 	border-radius: 50%;
+	color: red;
 	font-size: 200%;
+	font-weight: bold;
+	font-family: Helvetica;
+}
+a.predator {
+	background-image: url('../imagenes/predator.png');
+	line-height: 50px;
+}
+
+a.agent {
+	background-image: url('../imagenes/agent.png');
+	line-height: 120px;
 }
 
 a:hover {
-	color: #999;
+	color: white;
+	text-decoration: none;
+	border: solid 1px white;
+	opacity: 0.8;
 }
