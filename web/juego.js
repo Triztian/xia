@@ -21,6 +21,18 @@ function init(){
 	ficha.src = 'imagenes/D' + varSec + '.jpg';
 }
 
+function setControlState(enabled) {
+	if (enabled) {
+		$('[type="image"]')
+			.prop('disabled', false)
+			.attr('src', 'imagenes/mov-arrow.png');
+	} else {
+		$('[type="image"]')
+			.prop('disabled', true)
+			.attr('src', 'imagenes/mov-arrow-disabled.png');
+	}
+} 
+
 function mueve(dir){
 	var ficha = document.getElementById(posActualInt), 
 		egasth = document.getElementById(posActual);
@@ -39,9 +51,7 @@ function mueve(dir){
 		},
 		success: function(resp, xhr) {
 			console.log(resp);		
-			$('[type="image"]')
-				.prop('disabled', true)
-				.attr('src', 'imagenes/mov-arrow-disabled.png');
+			setControlState(false);
 		},
 		error: function(resp, xhr) {
 			console.log('Saving Position Error', resp, xhr);
@@ -89,9 +99,7 @@ $(document).ready(function(){
 	chatView.chat.onMessage = function(msg) {
 			onmsg();
 			if ( !this.isCommand(msg) ) {
-				$('[type="image"]')
-					.prop('disabled', false)
-					.attr('src', 'imagenes/mov-arrow.png');
+				setControlState(true);
 			} else if ( msg.match(chatView.chat.CLIENT_TYPE_COMMAND) ) {
 				var cmd = chatView.chat.parseMessage(msg), 
 					connAttrs = {

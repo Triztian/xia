@@ -117,7 +117,7 @@ var ChatView = (function(){
 			}, 
 			// On Message
 			function(e) {
-				console.log('Message Received');
+				console.log('Message Received', e);
 				that.render();
 			}, 
 			// On Error

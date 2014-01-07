@@ -82,3 +82,8 @@ header{
 	border-radius: 6px;
 	border: solid 1px #0F5734;
 }
+
+textarea {
+	background-color: rgb(56, 56, 55) !important;
+	border: solid 1px #6E6568 !important; 
+}

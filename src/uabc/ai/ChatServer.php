@@ -5,9 +5,14 @@ use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 
 class ChatServer implements MessageComponentInterface {
+
+	private static $COMMANDS = array(
+		'/^NEW-CLIENT:\s*(\d+)$/',
+		'/CLIENT-TYPE:\s*(\w+)/'
+	);
+
 	protected $clients;
 	private $db;
-
 
     public function __construct() {
         $this->clients = new \SplObjectStorage;
@@ -20,11 +25,15 @@ class ChatServer implements MessageComponentInterface {
 	 */ 
     public function onOpen(ConnectionInterface $conn) {
         // Store the new connection to send messages to later
-        $this->clients->attach($conn);
         print("New connection ({$conn->resourceId})\n");
+        $this->clients->attach($conn);
 		foreach ( $this->clients as $client ) {
 			if ( $conn !== $client ) {
-				$client->send('NEW-CLIENT: ' . $client->resourceId);
+				print("Sending Connection status to $client->resourceId\n");
+				$client->send('NEW-CLIENT: ' . $conn->resourceId);
+			} else {
+				print("Sending Client status to $conn->resourceId\n");
+				$conn->send('NEW-CLIENT: ' . $client->resourceId);
 			}
 		}
     }
@@ -42,7 +51,8 @@ class ChatServer implements MessageComponentInterface {
         print(sprintf('Connection %d sending message "%s" to %d other connection%s' . "\n" , 
 				$from->resourceId, $msg, $numRecv, $numRecv == 1 ? '' : 's')); 
 
-		$this->storeMessage($msg);
+		if ( !$this->isCommand($msg) )
+			$this->storeMessage($msg);
 
         foreach ($this->clients as $client) {
             if ($from !== $client) {
@@ -59,15 +69,31 @@ class ChatServer implements MessageComponentInterface {
         echo "Connection {$conn->resourceId} has disconnected\n";
     }
 
+	/**
+	 * Called when an error occurs.
+	 */
     public function onError(ConnectionInterface $conn, \Exception $e) {
         echo "An error has occurred: {$e->getMessage()}\n";
         $conn->close();
     }
 
+	/**
+	 * Stores the message in the database.
+	 */
 	private function storeMessage($msg) {
 		$sql = sprintf('INSERT INTO tablafinal (MENSAJE) VALUES ("%s")', $msg);
-		print("Executing: $sql\n");
 		$affected = $this->db->exec($sql);
 		print('Stored ' . $affected);
+	}
+
+	/**
+	 * Determine if the message is a command or not.
+	 */
+	private function isCommand($msg) {
+		foreach(self::$COMMANDS as $cmd) {
+			if ( preg_match($cmd, $msg) ) 
+				return true;
+		}
+		return false;
 	}
 }

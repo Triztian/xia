@@ -1,6 +1,7 @@
 h1, h3, h4 {
 	text-align: center;
 }
+
 a {
 	border: solid 1px transparent;
 	margin: 0 auto 5px auto;
@@ -15,6 +16,7 @@ a {
 	font-weight: bold;
 	font-family: Helvetica;
 }
+
 a.predator {
 	background-image: url('../imagenes/predator.png');
 	line-height: 50px;
