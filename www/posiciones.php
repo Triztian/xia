@@ -14,7 +14,7 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 	$mov = $_POST['mov'];
 
 	$game->movePlayer($predatorId, $position, $mov);
-	if ( $game->isPreyTurn() ) {
+	if ( $game->isPreyTurn() && !$game->isPreySurrounded() ) {
 		$game->movePrey();
 	}
 }
@@ -22,6 +22,7 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 $res = mysqli_query($mysqli, "SELECT * FROM posiciones where id = " . $predatorId);
 $row = mysqli_fetch_assoc($res);
 $row['enableChat'] = $game->isPreyTurn();
+$row['preySurrounded'] = $game->isPreySurrounded();
 
 print(json_encode($row));
 exit(0);
