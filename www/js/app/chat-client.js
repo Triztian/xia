@@ -126,6 +126,7 @@ var ChatView = (function(){
 			},
 			// On Close
 			function(e) {
+				that.$('.glyphicon').removeClass('text-success').addClass('text-muted');
 				console.log('Closing Chat', e);
 			});
 

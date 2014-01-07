@@ -1,124 +1,79 @@
-var dep1=1;
-var dep2=1;
-var dep3=1;
-var dep4=1;
-var dep5=1;
-var posActual;
-var posActual2;
-var posActual3;
-var posActual4;
-var posActual5;
-var i=1;
+// Declaracion de variables globales
+var posActual, 
+	posActual2,
+	posActual3,
+	posActual4,
+	posActual5;
 
-function init()
-{
-	setInterval(segunda,500);
-}
-function segunda(){
-	console.log(i);
-	i=1;
-	$.ajax({
-		type: "GET",
-		url: "posiciones.php",
-		data:{id:i},
-		dataType: "JSON",
-		success:function(jug, mensaje){
-			console.log(jug, mensaje);
-			posActual=dep1;
-			dep1 = jug.posicion
-			aparece();
-		}
+// Las siguientes lineas de codigo se ejecutan ya que se termina de cargar
+// la pagina, `$(document).ready(function() { ... })` es el equivalente de asignar una 
+// funcion a window.onload o sea `window.onload = function () { ... };`
+// Sin embrago, jQuery nos proporciona una manera mas clara en cuanto a su intencion
+$(document).ready(function() {
+	var chatView  =  new ChatView('#chat', 'A'), 
+		intervalId;
+
+	chatView.$('button').click(function() {
+		chatView.send();
+		chatView.disable();
 	});
-	i=2;
-	$.ajax({
-		type: "GET",
-		url: "posiciones.php",
-		data:{id:i},
-		dataType: "JSON",
-		success:function(jug, mensaje){
-			console.log(jug, mensaje);
-			posActual2=dep2;
-			dep2 = jug.posicion
-			aparece2();
+
+	// Esta funcion se encarga de obtener las posiciones de los jugadores 
+	// utilizando llamadas AJAX al servidor, su declaracion se movio aqui
+	// Para que puedan hacer uso del `chatView`, en particular la funcion 
+	// actualizarJugador
+	function obtenerPosiciones() {
+		$.ajax({
+			type: "GET",
+			url: "posiciones.php",
+			data: {id:0}, // Id especial para que se retornen TODAS las posciciones de todos los jugadores
+			dataType: "JSON",
+			// Se espera que players sea un arreglo de Javascript que contiene
+			// todas las posiciones de los jugadores
+			success: function (players, status, msg) {
+				var p, player;
+				for ( p in players ) {
+					player = players[p];
+					actualizarJugador(player);
+				}
+			}
+		});
+	}
+
+	// Definir el intervalo de actualizacion (medio segundo)
+	intervalId = setInterval(obtenerPosiciones, 500);
+
+	/**
+	 * Esta funcion se encarga de actualizar las imagenes del jugador 
+	 * proporcionado.
+	 */
+	function actualizarJugador (player) {
+		// La variable `window` es como un objeto que contiene
+		// todas las variable globales declaradas, se puede acceder a dichas variables
+		// se puede hacer ya sea `window.posActual1` o `window['posActual1']` o simplemente
+		// `posActual1`
+		var $prevToken = $('#' + window['posActual' + player.id]),
+			$currentToken = $('#' + player.posicion),
+			img = 'imagenes/' + (player.tipo == 'presa' ? 'presa' : 'D' + player.id) + '.jpg';
+
+		console.log('Player ' + player.id, player);
+		console.log($prevToken, $currentToken);
+		$prevToken.attr({src:  "imagenes/vacio.jpg"});
+		$currentToken.attr({src: img});
+
+		// Actualizar la posicion del jugador
+		window['posActual' + player.id] = player.posicion;
+
+		if ( player.enableChat ) 
+			chatView.enable();
+		
+		// Si la presa esta rodeada, eliminar la funcion que se obtiene las posiciones
+		// y mostrar el enlace para la pagina de descarga.
+		if ( player.preySurrounded ) {
+			clearInterval(intervalId);
+			$('#download-page').removeClass('hidden');
+			chatView.chat.connection.close();
+			chatView.disable();
 		}
-	});
-	i=3;
-	$.ajax({
-		type: "GET",
-		url: "posiciones.php",
-		data:{id:i},
-		dataType: "JSON",
-		success:function(jug, mensaje){
-			console.log(jug, mensaje);
-			posActual3=dep3;
-			dep3 = jug.posicion
-			aparece3();
-		}
-	});
-	i=4;
-	$.ajax({
-		type: "GET",
-		url: "posiciones.php",
-		data:{id:i},
-		dataType: "JSON",
-		success:function(jug, mensaje){
-			console.log(jug, mensaje);
-			posActual4=dep4;
-			dep4 = jug.posicion
-			aparece4();
-		}
-	});
-	i=5;
-	$.ajax({
-		type: "GET",
-		url: "posiciones.php",
-		data:{id:i},
-		dataType: "JSON",
-		success:function(jug, mensaje){
-			console.log(jug, mensaje);
-			posActual5=dep5;
-			dep5 = jug.posicion
-			aparece5();
-		}
-	});
-}
-function aparece()
-{
-	var fichaV = document.getElementById(posActual);
-	fichaV.src = "imagenes/vacio.jpg";
-	coordenada=dep1.toString();
-	var ficha = document.getElementById(coordenada);
-	ficha.src = "imagenes/D1.jpg";
-}
-function aparece2()
-{
-	var fichaV = document.getElementById(posActual2);
-	fichaV.src = "imagenes/vacio.jpg";
-	coordenada=dep2.toString();
-	var ficha = document.getElementById(coordenada);
-	ficha.src = "imagenes/D2.jpg";
-}
-function aparece3()
-{
-	var fichaV = document.getElementById(posActual3);
-	fichaV.src = "imagenes/vacio.jpg";
-	coordenada=dep3.toString();
-	var ficha = document.getElementById(coordenada);
-	ficha.src = "imagenes/D3.jpg";
-}
-function aparece4()
-{
-	var fichaV = document.getElementById(posActual4);
-	fichaV.src = "imagenes/vacio.jpg";
-	coordenada=dep4.toString();
-	var ficha = document.getElementById(coordenada);
-	ficha.src = "imagenes/D4.jpg";
-}
-function aparece5()
-{
-	var fichaV = document.getElementById(posActual5);
-	fichaV.src = "imagenes/vacio.jpg";
-	coordenada=dep5.toString();
-	var ficha = document.getElementById(coordenada);
-	ficha.src = "imagenes/presa.jpg";
-}
+	}
+});

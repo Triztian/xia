@@ -73,7 +73,11 @@ header{
 	text-align:right;
 }
 /* ========================= Global Structure END ============================== */
-
+#chat {
+	margin-bottom: 2em;
+	overflow: hidden;
+	height: auto;
+}
 .connections img {
 	margin: 0 5px;
 	border: solid 1px transparent;
@@ -86,4 +90,9 @@ header{
 textarea {
 	background-color: rgb(56, 56, 55) !important;
 	border: solid 1px #6E6568 !important; 
+}
+
+table tr td img {
+	width: 45px;
+	height: 45px;
 }

@@ -19,12 +19,24 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 	}
 }
 
-$res = mysqli_query($mysqli, "SELECT * FROM posiciones where id = " . $predatorId);
-$row = mysqli_fetch_assoc($res);
-$row['enableChat'] = $game->isPreyTurn();
-$row['preySurrounded'] = $game->isPreySurrounded();
+$result = null;
+if ( $predatorId == 0 ) {
+	$result = array();
+	$res = mysqli_query($mysqli, "SELECT *, IF(id = 5, 'presa', 'depredador') as tipo FROM posiciones");
+	$row = null;
+	while ( $row = mysqli_fetch_assoc($res) ) {
+		$row['enableChat'] = $game->isPreyTurn();
+		$row['preySurrounded'] = $game->isPreySurrounded();
+		$result[] = $row;
+	}
+} else { 
+	$res = mysqli_query($mysqli, "SELECT *,IF(id = 5, 'presa', 'depredador') as tipo  FROM posiciones where id = " . $predatorId);
+	$row = mysqli_fetch_assoc($res);
+	$row['enableChat'] = $game->isPreyTurn();
+	$row['preySurrounded'] = $game->isPreySurrounded();
+	$result = $row;
+}
 
-print(json_encode($row));
+print(json_encode($result));
 exit(0);
-
 ?>	
