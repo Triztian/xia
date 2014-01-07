@@ -32,6 +32,8 @@ class Game
 		$preyAdjacent = $this->getAdjacent($prey);
 		unset($preyAdjacent['p']);
 
+		$predators = $this->getPredatorPositions();
+
 		return count((array_diff($predators, array_values($preyAdjacent)))) == 0;
 	}
 
@@ -61,7 +63,8 @@ class Game
 			if ( !$this->isPositionTaken($p) )
 				$open[] = $m;
 
-		$mov = $open[(int)(rand() * count($open))]; 
+		$i = rand(0, count($open));
+		$mov = $open[$i]; 
 		$pos = $adjacent[$mov];
 
 		$this->movePlayer(self::PREY_ID, $pos, $mov);
@@ -122,7 +125,7 @@ class Game
 	/**
 	 * Obtain an array that contains the adjacent positions to a given one.
 	 */
-	public function getAdjecent($position) {
+	public function getAdjacent($position) {
 		return array(
 			'r' => $position + 1, 
 			'l' => $position - 1, 
