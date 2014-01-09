@@ -11,11 +11,35 @@ var posActual,
 // Sin embrago, jQuery nos proporciona una manera mas clara en cuanto a su intencion
 $(document).ready(function() {
 	var chatView  =  new ChatView('#chat', 'A'), 
+		onmsg = chatView.chat.onMessage,
 		intervalId;
 
 	chatView.$('button').click(function() {
 		chatView.send();
 		chatView.disable();
+	});
+
+	// Este permite que los estados de los clientes sean actualizados.
+	chatView.chat.onMessage = function(msg) {
+			onmsg();
+			if ( msg.match(chatView.chat.CLIENT_TYPE_COMMAND) ) {
+				var cmd = chatView.chat.parseMessage(msg), 
+					connAttrs = {
+						'title': 'Conectado',
+						'class': 'connected'
+					};
+
+				if ( cmd.type !== 'A' ) {
+					$('#predator-status-' + cmd.type.substring(1)).attr($.extend(connAttrs, {'src': 'imagenes/predator.png'}));
+				}
+			}
+	};
+
+	// Actualizar la conexion del agente (Siempre connectado).
+	$('#agent-status').attr({
+		'title': 'Conectado',
+		'class': 'connected',
+		'src': 'imagenes/agent.png'
 	});
 
 	// Esta funcion se encarga de obtener las posiciones de los jugadores 
@@ -57,7 +81,6 @@ $(document).ready(function() {
 			img = 'imagenes/' + (player.tipo == 'presa' ? 'presa' : 'D' + player.id) + '.jpg';
 
 		console.log('Player ' + player.id, player);
-		console.log($prevToken, $currentToken);
 		$prevToken.attr({src:  "imagenes/vacio.jpg"});
 		$currentToken.attr({src: img});
 

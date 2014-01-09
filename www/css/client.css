@@ -13,6 +13,10 @@ form a:hover {
 	cursor: pointer;
 }
 
+#controls {
+	margin-bottom: 1em;
+}
+
 #arrowLeft {
 	-webkit-transform: rotate(-90deg);
 	-moz-transform: rotate(-90deg);
@@ -39,7 +43,7 @@ form a:hover {
 }
 
 #chat {
-	height: 250px;
+	height: 300px;
 }
 .messages {
 	height: 170px;

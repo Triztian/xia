@@ -1,3 +1,13 @@
+<?php
+ini_set('display_errors', 1);
+require '/home/xia/vendor/autoload.php';
+use uabc\ai\Game;
+
+$game = Game::getInstance();
+
+$id = 5;
+$game->addPlayer($id);
+?>
 <!DOCTYPE HTML>
 <html>
     <head>
@@ -141,6 +151,14 @@
 							<td><img alt="Imagen" src="imagenes/vacio.jpg"  id="99"/></td>
 						</tr>
 					</table>
+					<div class="connections">
+						<h3 class="text-warning">Conexiones</h3>
+						<img id="agent-status" title="Desconectado" alt="Agente" src="imagenes/agent-disconnected.png" class="disconnected"/>
+						<img id="predator-status-1" title="Desconectado" alt="Depredador 1" src="imagenes/predator-disconnected.png" class="disconnected"/>
+						<img id="predator-status-2" title="Desconectado" alt="Depredador 2" src="imagenes/predator-disconnected.png" class="disconnected"/>
+						<img id="predator-status-3" title="Desconectado" alt="Depredador 3" src="imagenes/predator-disconnected.png" class="disconnected"/>
+						<img id="predator-status-4" title="Desconectado" alt="Depredador 4" src="imagenes/predator-disconnected.png" class="disconnected"/>
+					</div>
 				</div>
 				<div class="col-md-5">
 					<div id="chat">
@@ -153,7 +171,7 @@
 						</form>
 					</div>
 					
-					<a id="download-page" href="descargar.php" class="hidden btn btn-primary btn-block">Descargar Registro</a>
+					<a id="download-page" href="download.php?game=<?=$game->id?>&filename=xia-partida-<?=$game->id?>" class="hidden btn btn-primary btn-block">Descargar Registro</a>
 				</div>
 			<div>
 		</div>

@@ -1,99 +1,141 @@
-var posActual = 11, 
-	posActualInt, 
-	varSec = parseInt(window.location.href.split('?')[1].split('=')[1]);
+// Declaracion de variables GLOBALES
+var posActual,
+	predatorId = parseInt(window.location.href.split('?')[1].split('=')[1]),
+	UP_DIRECTION = 'u', 
+	DOWN_DIRECTION = 'd', 
+	LEFT_DIRECTION = 'l',
+	RIGHT_DIRECTION = 'r',
+	PASS_TURN = 'p';
 
-function init(){
-	// Declarar la relacion entre IDS y funciones a ejecutar
-	var arrowIds = {
-		'arrowLeft': mueveIzq, 
-		'arrowRight': mueveDer, 
-		'arrowDown': mueveAba, 
-		'arrowUp': mueveArr
-	}, ficha;
-
-	// Asignar las funciones a cada elemento
-	for ( var a in arrowIds )
-		if ( arrowIds.hasOwnProperty(a) )
-			document.getElementById(a).onclick = arrowIds[a];
-
-	posActualInt = (Math.floor(Math.random() *20));
-	ficha = document.getElementById(posActual);
-	ficha.src = 'imagenes/D' + varSec + '.jpg';
-}
-
+/**
+ * Esta funcion establece el estaod de los flechas.
+ */
 function setControlState(enabled) {
-	if (enabled) {
-		$('[type="image"]')
-			.prop('disabled', false)
-			.attr('src', 'imagenes/mov-arrow.png');
+	var enabledInputs = [], c;
+		
+	if ( enabled ) {
+		$.ajax({
+			url: 'posiciones.php',
+			data: {id: 0},
+			dataType: 'JSON',
+			success: function(players, status, jqxhr) {
+				console.log(players, status, jqxhr);
+				var disabled = [], p, player, i;
+				for ( p in players ) {
+					player = players[p];
+					if ( player.id === predatorId )
+						continue;
+
+					if ( posActual + 1 == player.posicion ) 
+						disabled.push('arrowRight');
+
+					if ( posActual - 1 == player.posicion ) 
+						disabled.push('arrowLeft');
+
+					if ( posActual + 10 == player.posicion ) 
+						disabled.push('arrowDown');
+
+					if ( posActual - 10 == player.posicion ) 
+						disabled.push('arrowUp');
+				}
+				for ( i in disabled ) {
+					$('#' + disabled[i])
+						.prop('disabled', true)
+						.attr('src', 'imagenes/mov-arrow-disabled.png');
+				}
+			}
+		});
+		if ( posActual > 10 )
+			enabledInputs.push($('#arrowUp'));
+
+		if ( posActual < 90 )
+			enabledInputs.push($('#arrowDown'));
+
+		if ( posActual % 10 >= 1 )
+			enabledInputs.push($('#arrowLeft'));
+
+		if ( posActual % 10 !== 9 )
+			enabledInputs.push($('#arrowRight'));
+
+		$('input[type="image"]')
+			.prop('disabled', true)
+			.attr('src', 'imagenes/mov-arrow-disabled.png');
+
+		for ( c in enabledInputs ) {
+			enabledInputs[c]
+				.prop('disabled', false)
+				.attr('src', 'imagenes/mov-arrow.png');
+		}
 	} else {
 		$('[type="image"]')
 			.prop('disabled', true)
 			.attr('src', 'imagenes/mov-arrow-disabled.png');
 	}
+	$('#passTurn').prop('disabled', !enabled);
 } 
 
 function mueve(dir){
-	var ficha = document.getElementById(posActualInt), 
-		egasth = document.getElementById(posActual);
-
-	ficha.src = "imagenes/vacio.jpg";
-	egasth.src = 'imagenes/D' + varSec + '.jpg';
-
 	$.ajax({
 		method: 'POST', 
 		url: 'posiciones.php', 
 		dataType: 'JSON',
 		data: {
-			id: varSec, 
+			id: predatorId, 
 			pos: posActual,
 			mov: dir
 		},
-		success: function(resp, xhr) {
-			console.log(resp);		
+		success: function(player, status, jqxhr) {
+			var imgSrc = 'imagenes/D' + predatorId + '.jpg',
+				$img = $('img[src="' + imgSrc + '"]'),
+				$ficha = $('#' + player.posicion);
+
+			posActual = player.posicion;
 			setControlState(false);
+
+			$img.attr('src', 'imagenes/vacio.jpg');
+			$ficha.attr('src', imgSrc);
 		},
-		error: function(resp, xhr) {
-			console.log('Saving Position Error', resp, xhr);
+		error: function(player, xhr) {
+			console.log('Saving Position Error', player, xhr);
 		}
 	});
 }
 
 function mueveIzq(){
-	posActualInt = posActual;
 	posActual--;
 	if ( posActual < 0 ) 
 		posActual = 0;
-	mueve('l');
+	mueve(LEFT_DIRECTION);
 }
 
 function mueveDer(){
-	posActualInt = posActual;
 	posActual++;
 	if ( posActual > 99 ) 
 		posActual = 99;
-	mueve('r');
+	mueve(RIGHT_DIRECTION);
 }
 
 function mueveAba(){
-	posActualInt = posActual;
 	posActual += 10;
 	if ( posActual > 99 ) 
 		posActual = 99;
-	mueve('u');
+
+	mueve(UP_DIRECTION);
 }
 
 function mueveArr(){
-	posActualInt = posActual;
 	posActual -= 10;
 	if ( posActual < 0 ) 
 		posActual = 0;
-	mueve('d');
+	mueve(DOWN_DIRECTION);
+}
+
+function passTurn() {
+	mueve(PASS_TURN);
 }
 
 $(document).ready(function(){
-	init();
-	var chatView = new ChatView('#chat', 'D' + varSec),
+	var chatView = new ChatView('#chat', 'D' + predatorId),
 		onmsg = chatView.chat.onMessage;
 
 	chatView.chat.onMessage = function(msg) {
@@ -114,8 +156,34 @@ $(document).ready(function(){
 			}
 	};
 
-	$('#predator-status-' + varSec).attr({'src': 'imagenes/predator.png', 'title': 'Conectado', 'class': 'connected'});
+	$('#predator-status-' + predatorId).attr({'src': 'imagenes/predator.png', 'title': 'Conectado', 'class': 'connected'});
+
+	// Simple mape para realizar las asignaciones de funciones 
+	// de manera sencilla.
+	var arrowIds = {
+			'arrowLeft': mueveIzq, 
+			'arrowRight': mueveDer, 
+			'arrowDown': mueveAba, 
+			'arrowUp': mueveArr,
+			'passTurn': passTurn
+		};
+
+	// Asignar las funciones a cada elemento
+	for ( var a in arrowIds )
+		if ( arrowIds.hasOwnProperty(a) )
+			document.getElementById(a).onclick = arrowIds[a];
+
+	// Realizar la llamada inicial para obtener las posiciones del servidor
+	$.ajax({
+		method: 'GET',
+		url: 'posiciones.php', 
+		data: {id: predatorId}, 
+		dataType: 'JSON', 
+		success: function(player, status, jqxhr) {
+			console.log(player, status, jqxhr);
+			var ficha = document.getElementById(player.posicion);
+			ficha.src = 'imagenes/D' + predatorId + '.jpg';
+			posActual = player.posicion;
+		}
+	});
 });
-
-
-

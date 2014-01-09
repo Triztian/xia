@@ -3,6 +3,7 @@ namespace uabc\ai;
 
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
+use uabc\ai\Game;
 
 class ChatServer implements MessageComponentInterface {
 
@@ -81,9 +82,9 @@ class ChatServer implements MessageComponentInterface {
 	 * Stores the message in the database.
 	 */
 	private function storeMessage($msg) {
-		$sql = sprintf('INSERT INTO tablafinal (MENSAJE) VALUES ("%s")', $msg);
+		$game = Game::getInstance();
+		$sql = sprintf('INSERT INTO tablafinal (MENSAJE, partida) VALUES ("%s", %d)', $msg, $game->id);
 		$affected = $this->db->exec($sql);
-		print('Stored ' . $affected);
 	}
 
 	/**

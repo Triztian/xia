@@ -42,6 +42,16 @@ $agent = $status->fetch();
 				</div>
 				<div class="col-sm-2"></div>
 			</div>
+	
+			<form action="partida.php" method="POST" class="row">
+				<div class="col-sm-4"></div>
+				<div class="col-sm-4">
+					<button type="submit" class="btn btn-block btn-danger" name="action" value="reset" />
+						<span class="glyphicon glyphicon-exclamation-sign"></span> Reiniciar Partida <span class="glyphicon glyphicon-exclamation-sign"></span>
+					</button>
+				</div>
+				<div class="col-sm-4"></div>
+			</form>
 		</div>
     </body>
 </html>

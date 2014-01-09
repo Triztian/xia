@@ -1,20 +1,21 @@
 <?php
+ini_set('display_errors', 1);
 require '/home/xia/vendor/autoload.php';
-use PDO;
+use uabc\ai\Game;
+
+$game = Game::getInstance();
 
 $id = $_GET['id'];
 if ( empty($id) ) {
 	header('Location: /');
 }
 
-$db = new PDO('mysql:host=localhost;dbname=xia', 'xia', '123456');
-$db->exec("UPDATE posiciones SET estado = 1 WHERE id = $id LIMIT 1");
-
+$game->addPlayer($id);
 ?>
 <!DOCTYPE HTML>
 <html>
     <head>
-        <title>Depredador <?=$_GET['id']?></title>
+        <title>Depredador <?=$id?></title>
 		<link rel="stylesheet" href="css/bootstrap.min.css" />
 		<link rel="stylesheet" href="style.css" />
 		<link rel="stylesheet" href="css/client.css" />
@@ -164,23 +165,23 @@ $db->exec("UPDATE posiciones SET estado = 1 WHERE id = $id LIMIT 1");
 					</div>
 				</div>
 				<div class="col-sm-5">
-					<div>
+					<div id="controls">
 						<div id="centro">
 							<input id="arrowUp" type="image" src="imagenes/mov-arrow-disabled.png" value="d" disabled />
 						</div>
 						<div class="inline">
 							<input id="arrowLeft" type="image" src="imagenes/mov-arrow-disabled.png" value="l" disabled />
-							<div></div>
 							<input id="arrowRight" type="image" src="imagenes/mov-arrow-disabled.png" value="r" disabled />
 						</div>
 						<div id="centro">
 							<input id="arrowDown" type="image" src="imagenes/mov-arrow-disabled.png" value="d" disabled />
 						</div>
+						<button id="passTurn" type="button" class="btn btn-danger btn-block" disabled="disbled">Pasar Turno</button>
 					</div>
-					<div id="chat" class="panel panel-danger">
+					<div id="chat" class="panel panel-muted">
 						<div class="panel-heading">
-							<span class="glyphicon glyphicon-globe"> Conectado</span>
-							<h3 class="panel-title">Mensajes del Agente</h3>
+							<h6> <span class="glyphicon glyphicon-globe center-block"> Conectado</span> </h6>
+							<h3 class="panel-title text-warning">Mensajes del Agente</h3>
 						</div>
 						<div class="panel-body">
 							<dl class="messages"></dl>
